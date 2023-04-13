@@ -36,23 +36,39 @@ function galleryRender() {
   // Add by HTML
   // galleryList.insertAdjacentHTML("beforeend", galleryHtmlItems);
 }
-
 galleryRender();
 
 var lightbox = new SimpleLightbox(".gallery li a", {
   captionsData: "alt",
   captionPosition: "outside",
   captionDelay: 250,
+  disableScroll: true,
 });
 
-galleryList.addEventListener("click", (event) => {
+function desktopScrollLockOff() {
+  let desktopBreakpoint = innerWidth > 1015 && window.scrollY === 0;
+
+  if (desktopBreakpoint) {
+    lightbox.options.disableScroll = false;
+    document.body.style.paddingRight = 0;
+  }
+  lightbox.options.disableScroll = true;
+}
+
+function openLightbox(event) {
   event.preventDefault();
+
   if (event.target.nodeName !== "IMG") {
     return;
   }
+
+  desktopScrollLockOff();
+
   lightbox.open(event.target);
-});
+}
+
+// galleryList.addEventListener("click", desktopScrollLockOff);
+galleryList.addEventListener("click", openLightbox);
 
 console.log(galleryItems);
-console.log("lightbox object: ", lightbox);
 console.log(galleryList);
